@@ -55,8 +55,6 @@ if (isset($_SESSION['upload_token']) && $_SESSION['upload_token']) {
 }
 
 /********************************************************************************************/
-/********************************************************************************************/
-/********************************************************************************************/
 
 //webhook//
 // Big switch statement to handle the different events
@@ -64,7 +62,7 @@ if (isset($_SESSION['upload_token']) && $_SESSION['upload_token']) {
 $file = "./logs/webhook.log";
 $fich = "./logs/lasan.log";
 $fich2 = "./logs/File_id.log";
-$fich3 = "./logs/GD_files.csv";
+$fich3 = "./logs/GD_files.txt";
 switch ($_POST['type']) {
 
   // Validate the webhook. This is a special case where we verify newly created webhooks.
@@ -89,24 +87,13 @@ switch ($_POST['type']) {
 		
 			//Verifica se item tem ficheiros
 			if (count($item_obj->files)>0){
-				
-				/*criar pastas com nome data -- google Drive
-				$folderName = date("Y-m-d",time());
-				$fileMetadata = new Google_Service_Drive_DriveFile(array(
-				  'name' => $folderName,
-				  'mimeType' => 'application/vnd.google-apps.folder'));
-				$folder = $service->files->create($fileMetadata, array(
-				  'fields' => 'id'));
-				  */
 
 				//percorrer cada ficheiro
 				foreach ($item_obj->files as $fil){
 					$fils = "File id: ".$fil->file_id;
 					file_put_contents($fich2, print_r ($fils ,true), FILE_APPEND | LOCK_EX);					
 					
-					$ficheiro = PodioFile::get($fil->file_id);					
-					
-					//file_put_contents($ficheiro->name, $ficheiro->get_raw()); //download de ficheiro para mesmo directorio deste ficheiro					
+					$ficheiro = PodioFile::get($fil->file_id);															
 			
 					//inserir ficheiro em pasta Candidates -- google Drive
 					$folderId = CANDIDATES;
@@ -126,8 +113,7 @@ switch ($_POST['type']) {
 					  'fields' => 'id'));
 					printf("File ID: %s\n", $file->id);	
 					
-					//Inserir comentários no item indicando que ficheiros foram guardados
-					
+					//Inserir comentários no item indicando que ficheiros foram guardados					
 					$ref_type = 'item';
 					$ref_id = $_POST['item_id'];
 					$comment = "Ficheiro guardado:".$nome_fich." Data:".gmdate('Y-m-d H:i:s');
