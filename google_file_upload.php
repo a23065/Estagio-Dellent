@@ -138,7 +138,7 @@ switch ($_POST['type']) {
 		//Inserir comentários no item indicando que não tem CV					
 		$ref_type = 'item';
 		$ref_id = $_POST['item_id'];
-		$comment = "Não tem currículo anexado!".$nome_fich." Data:".date('Y-m-d H:i:s',time()-3600);						
+		$comment = "Não tem currículo anexado! (".date('Y-m-d H:i:s',time()-3600).")";						
 		PodioComment::create( $ref_type, $ref_id, $attributes = array(
 			'value' => $comment,						
 		) );
